@@ -9,23 +9,33 @@ interface Props {
 }
 
 export default function Navbar({ activeTab, setActiveTab }: Props) {
-  const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const audio = new Audio("/initiates/soundtrack.mp3");
     audio.loop = true;
     audio.volume = 0.18;
-    audio.muted = true;
     audioRef.current = audio;
-    audio.play().catch(() => {});
     return () => { audio.pause(); audio.src = ""; };
   }, []);
 
-  const toggleMute = () => {
+  const toggleAudio = () => {
     if (!audioRef.current) return;
-    audioRef.current.muted = !muted;
-    setMuted(!muted);
+    if (!started) {
+      // First tap — browsers require a user gesture before playing
+      audioRef.current.play().then(() => {
+        setPlaying(true);
+        setStarted(true);
+      }).catch((e) => console.warn("Audio play failed:", e));
+    } else if (playing) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setPlaying(true);
+    }
   };
 
   const tabs = ["Arena", "Register", "Battle", "Leaderboard"];
@@ -40,7 +50,7 @@ export default function Navbar({ activeTab, setActiveTab }: Props) {
             <Image src="/initiates/symbol.jpg" alt="Initiates" fill style={{ objectFit: "cover" }} />
           </div>
           <span className="font-cinzel font-bold text-white text-sm hidden sm:block tracking-wider">
-            INITIATES<span className="text-ritualist-light"> ARENA</span>
+            INITIATES<span style={{ color: "#9b59b6" }}> ARENA</span>
           </span>
         </div>
 
@@ -52,23 +62,27 @@ export default function Navbar({ activeTab, setActiveTab }: Props) {
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-1.5 rounded text-xs font-mono tracking-wider whitespace-nowrap transition-all duration-200 ${
                 activeTab === tab
-                  ? "bg-ritualist text-white shadow-[0_0_12px_#7d3c98]"
+                  ? "text-white"
                   : "text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
+              style={activeTab === tab ? {
+                background: "#7d3c98",
+                boxShadow: "0 0 12px #7d3c98"
+              } : {}}
             >
               {tab.toUpperCase()}
             </button>
           ))}
         </div>
 
-        {/* Mute + Connect */}
+        {/* Audio toggle + Connect */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
-            onClick={toggleMute}
-            className="w-8 h-8 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-            title={muted ? "Unmute music" : "Mute music"}
+            onClick={toggleAudio}
+            className="w-8 h-8 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors text-base"
+            title={!started ? "Play music" : playing ? "Pause music" : "Play music"}
           >
-            {muted ? "🔇" : "🔊"}
+            {!started ? "🎵" : playing ? "🔊" : "🔇"}
           </button>
           <ConnectButton
             chainStatus="none"
