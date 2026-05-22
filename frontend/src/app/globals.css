@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --font-cinzel: 'Cinzel', serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #06060a;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a3e;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7d3c98;
+}
+
+/* Font utility classes */
+.font-cinzel {
+  font-family: var(--font-cinzel) !important;
+}
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+.font-sans {
+  font-family: var(--font-sans) !important;
+}
+
+/* RainbowKit overrides */
+[data-rk] {
+  --rk-fonts-body: var(--font-sans) !important;
+}
+
+/* Glow animations */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.glow-ritty    { box-shadow: 0 0 20px #c0392b; }
+.glow-bitty    { box-shadow: 0 0 20px #27ae60; }
+.glow-ritualist { box-shadow: 0 0 20px #7d3c98; }
+.glow-radiant  { box-shadow: 0 0 30px #f39c12, 0 0 60px #f1c40f44; }
+
+/* Selection color */
+::selection {
+  background: #7d3c9855;
+  color: #fff;
+}
+
+/* Input autofill override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0f inset;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+}

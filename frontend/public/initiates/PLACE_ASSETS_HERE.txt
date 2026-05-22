@@ -1,0 +1,7 @@
+Add these two files to this folder:
+
+1. symbol.jpg     — Initiates project logo (~18kb jpg)
+                    Used in the top-left of the navbar
+
+2. soundtrack.mp3 — Background music track (~3mb mp3)
+                    Autoplay looped at low volume, mute toggle in navbar
