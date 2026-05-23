@@ -1,7 +1,7 @@
 "use client";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import ConnectButton from "./ConnectButton";
 
 interface Props {
   activeTab: string;
@@ -24,11 +24,7 @@ export default function Navbar({ activeTab, setActiveTab }: Props) {
   const toggleAudio = () => {
     if (!audioRef.current) return;
     if (!started) {
-      // First tap — browsers require a user gesture before playing
-      audioRef.current.play().then(() => {
-        setPlaying(true);
-        setStarted(true);
-      }).catch((e) => console.warn("Audio play failed:", e));
+      audioRef.current.play().then(() => { setPlaying(true); setStarted(true); }).catch(() => {});
     } else if (playing) {
       audioRef.current.pause();
       setPlaying(false);
@@ -61,34 +57,25 @@ export default function Navbar({ activeTab, setActiveTab }: Props) {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-1.5 rounded text-xs font-mono tracking-wider whitespace-nowrap transition-all duration-200 ${
-                activeTab === tab
-                  ? "text-white"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800"
+                activeTab === tab ? "text-white" : "text-slate-400 hover:text-white hover:bg-slate-800"
               }`}
-              style={activeTab === tab ? {
-                background: "#7d3c98",
-                boxShadow: "0 0 12px #7d3c98"
-              } : {}}
+              style={activeTab === tab ? { background: "#7d3c98", boxShadow: "0 0 12px #7d3c98" } : {}}
             >
               {tab.toUpperCase()}
             </button>
           ))}
         </div>
 
-        {/* Audio toggle + Connect */}
+        {/* Audio + Connect */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
             onClick={toggleAudio}
-            className="w-8 h-8 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors text-base"
-            title={!started ? "Play music" : playing ? "Pause music" : "Play music"}
+            className="w-8 h-8 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            title={!started ? "Play music" : playing ? "Pause" : "Play"}
           >
             {!started ? "🎵" : playing ? "🔊" : "🔇"}
           </button>
-          <ConnectButton
-            chainStatus="none"
-            showBalance={false}
-            accountStatus="avatar"
-          />
+          <ConnectButton />
         </div>
       </div>
     </nav>
